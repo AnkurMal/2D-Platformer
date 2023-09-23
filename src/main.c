@@ -101,7 +101,7 @@ int main(void)
     return 0;
 }
 
-//function for different animation and collision in x-axis
+//function for different animations
 void PlayerMovement(int speed)
 {
    frames_counter++;
