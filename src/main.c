@@ -52,6 +52,7 @@ int main(void)
             LoadMapData(&map);
             player_dest_rect.x = 0;
             player_dest_rect.y = 0;
+            camera.target = (Vector2){player_dest_rect.x, 0};
         }
         if(map.data==NULL)
             break;
