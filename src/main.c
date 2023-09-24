@@ -173,7 +173,7 @@ void CheckCollision(void)
         }
 
     //Check if player is above window (y<0 in screen)
-    if(player_dest_rect.y<-cam_offset.y)
+    if(player_dest_rect.y<(-cam_offset.y))
     {
         player_dest_rect.y = -cam_offset.y;
         dy = 0;
