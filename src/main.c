@@ -20,13 +20,20 @@ static void PlayerMovement(int speed);
 static void PauseMovement(void);
 static void CheckCollision(void);
 static void Draw(void);
+static void UnloadData(void);
 
 int main(void)
 {
     SetTraceLogLevel(LOG_NONE);
+    LoadMapData(&map);
+    if(map.data==NULL)
+    {
+        UnloadMapData(&map);
+        return 1;
+    }
+
     InitAudioDevice();
     InitWindow(ScreenWidth, ScreenHeight, "game");
-    LoadMapData(&map);
     
     dirt = LoadTexture("../resources/images/dirt.png");  
     grass = LoadTexture("../resources/images/grass.png");
@@ -50,14 +57,17 @@ int main(void)
         if(IsKeyPressed(KEY_L) && map.level<3)
         {
             LoadMapData(&map);
+            if(map.data==NULL)
+            {
+                UnloadData();
+                return 1;
+            }
             player_dest_rect.x = 0;
             player_dest_rect.y = 0;
             camera.target = (Vector2){player_dest_rect.x, 0};
         }
-        if(map.data==NULL)
-            break;
 
-        //movement of player (left or right)
+        //Movement of the player (left or right)
         if(IsKeyDown(KEY_RIGHT) && (player_dest_rect.x+TILE_SIZE)<=(TILE_SIZE*map.column-cam_offset.x))
         {
            if (player_source_rect.width<0)
@@ -75,7 +85,7 @@ int main(void)
         if(IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT))
             PauseMovement();
 
-        //jumping of player
+        //Jumping of the player
         if(IsKeyPressed(KEY_SPACE) && (double_jump<2))
         {
             PlaySound(jump);
@@ -87,22 +97,12 @@ int main(void)
         CheckCollision();
         Draw(); 
     }
-    //unloading textures/sounds and closing window
-    UnloadTexture(grass);
-    UnloadTexture(dirt);
-    UnloadTexture(player);
-    UnloadTexture(coin);
-    UnloadSound(jump);
-    UnloadSound(coin_sound);
-    UnloadMapData(&map);
-    
-    CloseAudioDevice();
-    CloseWindow();
+    UnloadData();
     
     return 0;
 }
 
-//function for different animations
+//Function for showing frames of the player
 void PlayerMovement(int speed)
 {
    frames_counter++;
@@ -117,14 +117,14 @@ void PlayerMovement(int speed)
     dx = speed;
 }   
 
-//function for pausing animation
+//Function for stop showing frames of the player
 void PauseMovement(void)
 {
     current_frame = 2;
     player_source_rect.x = (float)current_frame*(float)player.width/6;
 }
 
-//checks for collision of the player with the required blocks/elements
+//Checks for collision of the player with the required blocks/elements
 void CheckCollision(void)
 {
     Rectangle player_pos_screen = 
@@ -143,16 +143,16 @@ void CheckCollision(void)
         {
             if(map.data[i*map.column+j]=='2')
             {
-                //check for collision in y direction
+                //Check for collision in y direction
                 if(CheckCollisionRecs(player_pos_screen, (Rectangle){j*TILE_SIZE, i*TILE_SIZE-dy, TILE_SIZE, TILE_SIZE}))
                 {
-                    //check if below the ground i.e. jumping
+                    //Check if below the ground i.e. jumping
                     if(dy<0)
                     {
                         player_dest_rect.y = (i+1)*TILE_SIZE-cam_offset.y;
                         dy = 0;
                     }
-                    //check if above the ground i.e. falling
+                    //Check if above the ground i.e. falling
                     else if(dy>=0)
                     {
                         player_dest_rect.y = (i-1)*TILE_SIZE-cam_offset.y;
@@ -160,7 +160,7 @@ void CheckCollision(void)
                         dy = 0;
                     }
                 }
-                //check for collision in x direction
+                //Check for collision in x direction
                 if(CheckCollisionRecs(player_pos_screen, (Rectangle){j*TILE_SIZE-dx, i*TILE_SIZE, TILE_SIZE, TILE_SIZE}))
                     dx = 0;
             }
@@ -172,7 +172,7 @@ void CheckCollision(void)
                 }
         }
 
-    //check if player is above window (y<0 in screen)
+    //Check if player is above window (y<0 in screen)
     if(player_dest_rect.y<-cam_offset.y)
     {
         player_dest_rect.y = -cam_offset.y;
@@ -182,7 +182,7 @@ void CheckCollision(void)
     player_dest_rect.x += dx;
 }
 
-//drawing on the screen (and update camera)
+//Drawing on the screen (and update camera)
 void Draw(void)
 {
     if(player_dest_rect.x>0 && (player_dest_rect.x+cam_offset.x*2)<(TILE_SIZE*map.column))
@@ -206,4 +206,19 @@ void Draw(void)
         EndMode2D();
         DrawFPS(10, 10);
     EndDrawing();
+}
+
+//Unloading data and closing window
+void UnloadData(void)
+{
+    UnloadTexture(grass);
+    UnloadTexture(dirt);
+    UnloadTexture(player);
+    UnloadTexture(coin);
+    UnloadSound(jump);
+    UnloadSound(coin_sound);
+    UnloadMapData(&map);
+    
+    CloseAudioDevice();
+    CloseWindow();
 }
