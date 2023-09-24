@@ -44,14 +44,12 @@ void LoadMapData(Map *map)
 
     int c = 0;
     for(int i=0; i<map->row; i++)
-    {
         for(int j=0; j<=map->column; j++)
         {
             if(sub_data[c]!='\n')
                 map->data[i*map->column+j] = sub_data[c];
             c++;
         }
-    }
 }
 
 void UnloadMapData(Map *map)
@@ -59,4 +57,6 @@ void UnloadMapData(Map *map)
     UnloadFileText(data_copy_ptr);
     if(map->data!=NULL)
         MemFree(map->data);
+    else
+        fprintf(stderr, "ERROR: Could not load level due to insufficient storage. Terminating program.");
 }
