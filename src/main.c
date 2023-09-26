@@ -64,6 +64,8 @@ int main(void)
             }
             player_dest_rect.x = 0;
             player_dest_rect.y = 0;
+            if(player_source_rect.width<0)
+                player_source_rect.width *= -1;
             camera.target = (Vector2){player_dest_rect.x, 0};
         }
 
