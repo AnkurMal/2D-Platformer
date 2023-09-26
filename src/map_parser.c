@@ -43,13 +43,9 @@ void LoadMapData(Map *map)
         map->data = (char *)MemRealloc(map->data, map->row*map->column*sizeof(char));
 
     int c = 0;
-    for(int i=0; i<map->row; i++)
-        for(int j=0; j<=map->column; j++)
-        {
-            if(sub_data[c]!='\n')
-                map->data[i*map->column+j] = sub_data[c];
-            c++;
-        }
+    for(int i=0; i<sub_data_len; i++)
+        if(sub_data[i]!='\n')
+            map->data[c++] = sub_data[i];
 }
 
 void UnloadMapData(Map *map)
