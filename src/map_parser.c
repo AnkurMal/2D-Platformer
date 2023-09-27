@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <stdlib.h>
 #include "map_parser.h"
 
 #define XOR_KEY 0x5A
@@ -38,9 +39,9 @@ void LoadMapData(Map *map)
 		}
     }
     if(level==1)
-        map->data = (char *)MemAlloc(map->row*map->column*sizeof(char));
+        map->data = (char *)malloc(map->row*map->column*sizeof(char));
     else
-        map->data = (char *)MemRealloc(map->data, map->row*map->column*sizeof(char));
+        map->data = (char *)realloc(map->data, map->row*map->column*sizeof(char));
 
     int c = 0;
     for(int i=0; i<sub_data_len; i++)
@@ -52,7 +53,7 @@ void UnloadMapData(Map *map)
 {
     UnloadFileText(data_copy_ptr);
     if(map->data!=NULL)
-        MemFree(map->data);
+        free(map->data);
     else
         fprintf(stderr, "ERROR: Could not load level due to insufficient storage. Terminating program.");
 }
