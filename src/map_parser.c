@@ -5,8 +5,7 @@
 #define XOR_KEY 0x5A
 
 char *data;
-char *data_copy_ptr;
-int level = 0;
+int start_pos = 0, level = 0;
 
 void LoadMapData(Map *map)
 {
@@ -21,13 +20,12 @@ void LoadMapData(Map *map)
         int data_len = TextLength(data);
         for(int i=0; i<data_len; i++)
             data[i] ^= XOR_KEY;
-        data_copy_ptr = data;
     }
     
-    const char *sub_data = TextSubtext(data, 0, TextFindIndex(data, "E")-1);
-    data += TextFindIndex(data, "E")+2;
+    const char *sub_data = TextSubtext(data, start_pos, TextFindIndex(data+start_pos, "E")-1);
 
     int sub_data_len = TextLength(sub_data);
+    start_pos += sub_data_len+3;
 
     for(int i=0; i<sub_data_len; i++)
     {
@@ -51,7 +49,7 @@ void LoadMapData(Map *map)
 
 void UnloadMapData(Map *map)
 {
-    UnloadFileText(data_copy_ptr);
+    UnloadFileText(data);
     if(map->data!=NULL)
         free(map->data);
     else
