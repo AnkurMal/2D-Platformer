@@ -40,6 +40,7 @@ void LoadMapData(Map *map)
         map->data = (char *)malloc(map->row*map->column*sizeof(char));
     else
         map->data = (char *)realloc(map->data, map->row*map->column*sizeof(char));
+    if(map->data==NULL) return;
 
     int c = 0;
     for(int i=0; i<sub_data_len; i++)
