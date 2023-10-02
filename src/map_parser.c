@@ -37,9 +37,9 @@ void LoadMapData(Map *map)
 		}
     }
     if(level==1)
-        map->data = (char *)malloc(map->row*map->column*sizeof(char));
+        map->data = malloc(map->row*map->column*sizeof(char));
     else
-        map->data = (char *)realloc(map->data, map->row*map->column*sizeof(char));
+        map->data = realloc(map->data, map->row*map->column*sizeof(char));
     if(map->data==NULL) return;
 
     int c = 0;
