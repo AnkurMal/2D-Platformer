@@ -11,7 +11,7 @@ Vector2 cam_offset;
 Rectangle player_source_rect, player_dest_rect;
 Sound jump, coin_sound;
 Camera2D camera;
-Map map;
+Map map = {.level = 0};
 
 int current_frame = 0, frames_counter = 0;
 int dx, dy = 0, double_jump = 0;
