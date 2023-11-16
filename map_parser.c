@@ -15,7 +15,7 @@ void LoadMapData(Map *map)
 
     if(map->level==1)
     {
-        data = LoadFileText("level-map/map.bin");
+        data = LoadFileText("resources/level-map/map.bin");
         int data_len = TextLength(data);
         for(int i=0; i<data_len; i++)
             data[i] ^= XOR_KEY;
