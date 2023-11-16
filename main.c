@@ -41,19 +41,19 @@ int main(void)
     InitAudioDevice();
     InitWindow(ScreenWidth, ScreenHeight, "game");
     
-    dirt = LoadTexture("images/dirt.png");  
-    grass = LoadTexture("images/grass.png");
-    coin = LoadTexture("images/coin.png");
+    dirt = LoadTexture("resources/images/dirt.png");  
+    grass = LoadTexture("resources/images/grass.png");
+    coin = LoadTexture("resources/images/coin.png");
     
-    player = LoadTexture("images/scarfy.png");
+    player = LoadTexture("resources/images/scarfy.png");
     player_source_rect = (Rectangle){((float)player.width/6)*2, 0.0f, (float)player.width/6, (float)player.height};
     player_dest_rect = (Rectangle){0, 0, TILE_SIZE, TILE_SIZE};
 
     cam_offset = (Vector2){ScreenWidth/2, (map.row-5)*TILE_SIZE};
     camera = (Camera2D){cam_offset, (Vector2){player_dest_rect.x, 0}, 0, 1};
     
-    jump = LoadSound("audio/jump.mp3");
-    coin_sound = LoadSound("audio/coin.mp3");
+    jump = LoadSound("resources/audio/jump.mp3");
+    coin_sound = LoadSound("resources/audio/coin.mp3");
     
     SetTargetFPS(60);
     while(!WindowShouldClose())
